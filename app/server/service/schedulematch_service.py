@@ -65,6 +65,7 @@ class ScheduleMatchService:
             objFind = await self.collection.find_one(id)
             if objFind:
                 objUp = await self.collection.update_condition(id, data)
+                objUp = await self.collection.update_condition(id,data)
                 if objUp:
                     return True
                 return False
