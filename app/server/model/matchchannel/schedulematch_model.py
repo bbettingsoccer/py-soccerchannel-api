@@ -44,7 +44,7 @@ class ScheduleMatchModel(BaseModel):
     @staticmethod
     def data_helper(scheduleMatch) -> dict:
         return {
-            "id": str(scheduleMatch['_id']),
+            "_id": str(scheduleMatch['_id']),
             "championshipCode": str(scheduleMatch["championshipCode"]),
             "dateMatch": str(scheduleMatch["dateMatch"]),
             "team1": str(scheduleMatch["team1"]),

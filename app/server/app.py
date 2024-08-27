@@ -4,9 +4,9 @@ from .routes import currentmatch_router as CurrentmatchRouter
 from .routes import championship_router as  ChampionshipRouter
 
 app = FastAPI()
-app.include_router(SchedulematchRouter.router, tags=["ScheduleMatch"], prefix="/schedule")
-app.include_router(CurrentmatchRouter.router, tags=["CurrentMatch"], prefix="/current")
-app.include_router(ChampionshipRouter.router, tags=["Championship"], prefix="/championship")
+app.include_router(SchedulematchRouter.router, tags=["ScheduleMatch"], prefix="/soccerchannel/schedule")
+app.include_router(CurrentmatchRouter.router, tags=["CurrentMatch"], prefix="/soccerchannel/current")
+app.include_router(ChampionshipRouter.router, tags=["Championship"], prefix="/soccerchannel/championship")
 
 @app.get("/", tags=["Root"])
 async def read_root():

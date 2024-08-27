@@ -2,6 +2,7 @@ from app.server.common.match_constants import MatchConstants
 from app.server.dao.operationimpl_dao import OperationImplDAO
 from app.server.model.matchchannel.championship_model import ChampionshipModel
 from fastapi.encoders import jsonable_encoder
+from typing import List
 
 
 class ChampionshipService:
@@ -9,40 +10,40 @@ class ChampionshipService:
     def __init__(self):
         self.collection = OperationImplDAO("championships")
 
-    async def getAllChampionships(self):
+    async def getChampionshipsForAll(self):
         objectL = []
         try:
-            objects = await self.collection.find_all()
+            objects = await self.collection.find_condition(None)
             if objects:
                 for objected in objects:
                     objectL.append(ChampionshipModel.data_helper(objected))
                 return objectL
         except Exception as e:
-            print("Error Execution Find ", e)
+            print("[Error :: Service] - FindAll")
         return None
 
-    async def getChampionshipForCondiction(self, search: str, value1: str, value2: str):
+    async def getChampionshipForCondition(self, search: str, values: [str]):
         objectL = []
         filter = []
         match search:
             case MatchConstants.GET_SEARCH_CHAMPIONSHIP_CODE:
-                filter = {ChampionshipModel.config.championshipCode: value1}
+                filter = {ChampionshipModel.config.championshipCode: values[0]}
             case MatchConstants.GET_SEARCH_CHAMPIONSHIP_NAME:
-                filter = {ChampionshipModel.config.championshipName: {"$eq": value1}}
+                filter = {ChampionshipModel.config.championshipName: {"$eq": values[0]}}
             case MatchConstants.GET_SEARCH_COUNTRY:
-                filter = {ChampionshipModel.config.country: {"$eq": value1}}
+                filter = {ChampionshipModel.config.country: {"$eq": values[0]}}
 
         try:
-            objects = await self.collection.find_condiction(filter)
+            objects = await self.collection.find_condition(filter)
             if objects:
                 for objected in objects:
                     objectL.append(ChampionshipModel.data_helper(objected))
                 return objectL
         except Exception as e:
-            print("Error Execution Find ", e)
+            print("[Error :: Service] - FindCondition > Filter :", filter)
         return None
 
-    async def deleteChampionshipForCondiction(self, type: str, value1: str, value2: str):
+    async def deleteChampionshipForCondition(self, type: str, value1: str, value2: str):
         filter = []
         match type:
             case MatchConstants.DELETE_CHAMPIONSHIP_NAME:
@@ -50,11 +51,9 @@ class ChampionshipService:
             case MatchConstants.DELETE_CHAMPIONSHIP_CODE:
                 filter = {ChampionshipModel.config.championshipCode: value1}
         try:
-            print('filter champion: ', filter)
-
             return await self.collection.delete_condition(filter)
         except Exception as e:
-            print('Error delete process: ', e)
+            print('Error :: Service] - DeleteCondition > Filter ', filter)
             return False
 
     async def updateChampionship(self, id: str, data: dict):
@@ -63,18 +62,25 @@ class ChampionshipService:
         try:
             objFind = await self.collection.find_one(id)
             if objFind:
-                objUp = await self.collection.update_condition(id, data)
-                if objUp:
-                    return True
-                return False
+                await self.collection.update_one(id, data)
+                return True
         except Exception as e:
-            print('Error update process: ', e)
+            print('Error :: Service] - Update >', data)
             return False
 
-    async def saveChampionship(self, dataObj: ChampionshipModel):
-        objetJson = jsonable_encoder(dataObj)
+    async def saveChampionship(self, data: List[ChampionshipModel]):
+        filter = []
+        result = False
         try:
-            return await self.collection.save(objetJson)
+            for json_obj in data:
+                values = [json_obj.championshipName]
+                objUpdateOrSave = await self.getChampionshipForCondition(MatchConstants.GET_SEARCH_CHAMPIONSHIP_NAME, values)
+
+                if objUpdateOrSave is None:  # SAVE - Transaction
+                    jsonObj = jsonable_encoder(json_obj)
+                    await self.collection.save(jsonObj)
+                    result = True
+            return result
         except Exception as e:
-            print('Error update process', e)
-            return False
+            print('Error :: Service] - Save >', e)
+            raise

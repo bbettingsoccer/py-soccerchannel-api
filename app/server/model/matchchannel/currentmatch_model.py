@@ -2,6 +2,7 @@ import pydantic
 from pydantic import BaseModel, Field, constr, conint, create_model, condate
 from bson.objectid import ObjectId
 
+
 class CurrentMatchModel(BaseModel):
     championshipCode: constr(strict=True) = Field(...)
     dateMatch: constr(strict=True) = Field(...)
@@ -27,20 +28,19 @@ class CurrentMatchModel(BaseModel):
     @classmethod
     def as_optional(cls):
         annonations = cls.__fields__
-        OptionalModel =  create_model(
+        OptionalModel = create_model(
             f"Optional{cls.__name__}",
             __base__=CurrentMatchModel,
             **{
                 k: (v.annotation, None) for k, v in CurrentMatchModel.model_fields.items()
-               })
+            })
 
-#        fields = {
- #           attribute: (Optional[data_type.type_], None)
-  #          for attribute, data_type in annonations.items()
-   #     }
-       # OptionalModel = create_model(f"Optional{cls.__name__}", **fields)
+        #        fields = {
+        #           attribute: (Optional[data_type.type_], None)
+        #          for attribute, data_type in annonations.items()
+        #     }
+        # OptionalModel = create_model(f"Optional{cls.__name__}", **fields)
         return OptionalModel
-
 
     def ResponseModel(data, message):
         return {
@@ -49,14 +49,13 @@ class CurrentMatchModel(BaseModel):
             "message": message,
         }
 
-
     def ErrorResponseModel(error, code, message):
         return {"error": error, "code": code, "message": message}
 
     @staticmethod
     def data_helper(currentmatch) -> dict:
         return {
-            "id": str(currentmatch['_id']),
+            "_id": str(currentmatch['_id']),
             "championshipCode": str(currentmatch["championshipCode"]),
             "dateMatch": str(currentmatch["dateMatch"]),
             "team1": str(currentmatch["team1"]),

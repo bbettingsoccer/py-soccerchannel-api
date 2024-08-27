@@ -46,7 +46,7 @@ class ChampionshipModel(BaseModel):
     @staticmethod
     def data_helper(championship) -> dict:
         return {
-            "id": str(championship['_id']),
+            "_id": str(championship['_id']),
             "championshipCode": str(championship["championshipCode"]),
             "championshipName":  str(championship["championshipName"]),
             "country": str(championship["country"]),
