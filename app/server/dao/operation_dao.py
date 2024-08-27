@@ -10,12 +10,9 @@ class OperationDAO(metaclass=ABCMeta):
     def get_collection(self) -> AgnosticCollection:
         pass
 
-    @abstractmethod
-    async def find_all(self) -> list[dict]:
-        pass
 
     @abstractmethod
-    async def find_condiction(self, filter):
+    async def find_condition(self, filter):
         pass
 
     @abstractmethod
@@ -27,9 +24,13 @@ class OperationDAO(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    async def update_condition(self, id, data):
+    async def update_many(self, filter, data):
         pass
 
     @abstractmethod
-    async def delete_condition(self, filter, value):
+    async def update_one(self, id, data):
+        pass
+
+    @abstractmethod
+    async def delete_condition(self, filter):
         pass

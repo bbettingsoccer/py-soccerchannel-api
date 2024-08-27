@@ -5,7 +5,9 @@ class MatchConstants:
 
     GET_SEARCH_COUNTRY = "search_country"
     GET_SEARCH_STATUS = "search_status"
-    GET_SEARCH_STATUS_CHAMPIONSHIP_CODE = "search_championship_code_status"
+    GET_SEARCH_DATE_MATCH_CHAMPIONSHIP_CODE = "search_championship_code_date"
+    GET_SEARCH_DATE_CHAMPIONSHIP_CODE_TEAM = "search_championship_code_date_team"
+    GET_SEARCH_CHAMPIONSHIP_CODE_TEAM_DATA = "search_championship_code_team"
     DELETE_DATE = "delete_date"
     DELETE_CHAMPIONSHIP_CODE = "delete_championship_code"
     DELETE_CHAMPIONSHIP_NAME = "delete_championship_name"
