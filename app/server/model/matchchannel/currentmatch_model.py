@@ -4,15 +4,13 @@ from bson.objectid import ObjectId
 
 
 class CurrentMatchModel(BaseModel):
-    championshipCode: constr(strict=True) = Field(...)
-    dateMatch: constr(strict=True) = Field(...)
-    team1: constr(strict=True) = Field(...)
-    team2: constr(strict=True) = Field(...)
-    scoreTeam1: constr(strict=True) = Field(...)
-    scoreTeam2: constr(strict=True) = Field(...)
-    imgTeam1: constr(strict=True) = Field(...)
-    imgTeam2: constr(strict=True) = Field(...)
-    status: constr(strict=True) = Field(...)
+    championshipCode: constr(strict=True) = Field(default=None, title="championshipCode")
+    dateMatch: constr(strict=True) = Field(default=None, title="dateMatch")
+    team1: constr(strict=True) = Field(default=None, title="team1")
+    team2: constr(strict=True) = Field(default=None, title="team2")
+    scoreTeam1: constr(strict=True) = Field(default=None, title="scoreTeam1")
+    scoreTeam2: constr(strict=True) = Field(default=None, title="scoreTeam2")
+    status: constr(strict=True) = Field(default=None, title="status")
 
     class config:
         championshipCode = "championshipCode"
@@ -21,8 +19,6 @@ class CurrentMatchModel(BaseModel):
         team2 = "team2"
         scoreTeam1 = "scoreTeam1"
         scoreTeam2 = "scoreTeam2"
-        imgTeam1 = "imgTeam1"
-        imgTeam2 = "imgTeam2"
         status = "status"
 
     @classmethod
@@ -62,7 +58,5 @@ class CurrentMatchModel(BaseModel):
             "team2": str(currentmatch["team2"]),
             "scoreTeam1": str(currentmatch["scoreTeam1"]),
             "scoreTeam2": str(currentmatch["scoreTeam2"]),
-            "imgTeam1": str(currentmatch["imgTeam1"]),
-            "imgTeam2": str(currentmatch["imgTeam2"]),
             "status": str(currentmatch["status"]),
         }
